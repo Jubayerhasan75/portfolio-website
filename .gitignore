@@ -1,0 +1,8 @@
+node_modules
+dist
+.env
+.env.local
+
+# Private source material: raw CV, original photos, screen recordings, upscale masters.
+# Everything the site needs is already generated into public/.
+reference-materials/

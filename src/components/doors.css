@@ -1,0 +1,526 @@
+.doors {
+  position: relative;
+  height: 100svh;
+  min-height: 36rem;
+  margin-top: calc(var(--radius-card) * -1);
+  background: var(--wall);
+}
+.doors__pin {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+.doors__wall {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(42% 50% at 14% 62%, rgba(255, 255, 255, 0.5), transparent 70%),
+    radial-gradient(42% 50% at 38% 62%, rgba(255, 255, 255, 0.5), transparent 70%),
+    radial-gradient(42% 50% at 62% 62%, rgba(255, 255, 255, 0.5), transparent 70%),
+    radial-gradient(42% 50% at 86% 62%, rgba(255, 255, 255, 0.5), transparent 70%),
+    linear-gradient(180deg, var(--wall-hi), var(--wall));
+  transition:
+    transform 1.25s cubic-bezier(0.6, 0, 0.3, 1),
+    filter 1s ease;
+  will-change: transform;
+}
+:root[data-theme='dark'] .doors__wall {
+  background:
+    radial-gradient(40% 55% at 50% 60%, rgba(232, 214, 210, 0.05), transparent 70%),
+    linear-gradient(180deg, var(--wall-hi), var(--wall));
+}
+.doors--entering .doors__wall {
+  transform: scale(5.5);
+  filter: brightness(0.5);
+}
+.doors__inner {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-top: calc(var(--hdr-h) + var(--radius-card) + 0.5rem);
+}
+
+.paint {
+  text-align: center;
+  font-size: clamp(2rem, 5.3vw, 4.75rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 1s var(--e-soft),
+    transform 1.2s var(--e-soft);
+}
+.doors.in .paint {
+  opacity: 1;
+  transform: none;
+}
+.paint .mbr {
+  display: none;
+}
+.doors__hint,
+.minfo {
+  display: none;
+}
+
+/* ---------- row ---------- */
+.doors__row {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  gap: clamp(1rem, 3.5vw, 4rem);
+  align-items: end;
+  padding-inline: clamp(0rem, 2vw, 2rem);
+  margin-top: 1.5rem;
+}
+.unit {
+  position: relative;
+  height: min(100%, 34rem);
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.8s var(--e-soft) calc(var(--i) * 90ms + 150ms),
+    transform 1.1s var(--e-soft) calc(var(--i) * 90ms + 150ms);
+}
+.doors.in .unit {
+  opacity: 1;
+  transform: none;
+}
+.doors.in .unit.dim {
+  opacity: 0.08;
+  transition-delay: 0s;
+  transition-duration: 0.6s;
+}
+.doorway {
+  position: relative;
+  height: 100%;
+  aspect-ratio: 0.47;
+  max-width: 100%;
+  cursor: none;
+}
+.casing {
+  position: absolute;
+  inset: 0 0 0 0;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(180deg, var(--casing), color-mix(in srgb, var(--casing) 86%, #000));
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.05),
+    0 30px 50px -20px var(--casing-sh),
+    inset 0 2px 0 rgba(255, 255, 255, 0.5);
+}
+.opening {
+  position: absolute;
+  inset: 4.2% 5.6% 0 5.6%;
+  border-radius: 999px 999px 0 0;
+  perspective: 1100px;
+  perspective-origin: 50% 50%;
+  overflow: hidden;
+}
+.room {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  background:
+    radial-gradient(70% 45% at 50% 100%, rgba(var(--spill), 0.55), transparent 70%),
+    radial-gradient(90% 70% at 50% 62%, var(--room-in) 0%, var(--room-mid) 30%, var(--room-out) 72%, #050505 100%);
+  box-shadow: inset 0 0 40px 10px rgba(0, 0, 0, 0.85);
+}
+.door {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transform-origin: 0 50%;
+  transform: rotateY(0deg);
+  background: linear-gradient(100deg, var(--door) 0%, var(--door-dk) 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+  transition: transform 0.9s var(--e-soft);
+  overflow: hidden;
+}
+.unit.ajar .door {
+  transform: rotateY(38deg);
+}
+.unit.open .door {
+  transform: rotateY(86deg);
+  transition: transform 0.85s cubic-bezier(0.5, 0, 0.2, 1);
+}
+.door__flute {
+  position: absolute;
+  inset: 7% 9% 6% 9%;
+  border-radius: 999px 999px 4px 4px;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.07) 0 2px, rgba(0, 0, 0, 0.16) 2px 5px, transparent 5px 9px);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+.door__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.28), transparent 30%, transparent 75%, rgba(0, 0, 0, 0.22));
+  opacity: 0.8;
+  transition: opacity 0.9s;
+}
+.unit.ajar .door__shade,
+.unit.open .door__shade {
+  opacity: 1.6;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.55));
+}
+.plate {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  width: 62%;
+  min-height: 11%;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  padding: 0.5em 0.6em;
+  text-align: center;
+  font-size: clamp(0.5rem, 0.82vw, 0.72rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  color: #3a2a10;
+  background: linear-gradient(135deg, var(--brass-1) 0%, var(--brass-2) 45%, #e9d08f 60%, var(--brass-3) 100%);
+  border-radius: 2px;
+  box-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+.plate::before,
+.plate::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  margin-top: -1.5px;
+  border-radius: 50%;
+  background: #7a5a22;
+}
+.plate::before {
+  left: 4px;
+}
+.plate::after {
+  right: 4px;
+}
+.handle {
+  position: absolute;
+  right: 9%;
+  top: 60%;
+  width: 26%;
+}
+.handle__lever {
+  display: block;
+  height: 0.5rem;
+  border-radius: 99px;
+  background: linear-gradient(180deg, var(--brass-1), var(--brass-2) 55%, var(--brass-3));
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.45);
+  transform-origin: 88% 50%;
+  transition: transform 0.5s var(--e-spring);
+}
+.handle__lever::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-top: -0.475rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--brass-1), var(--brass-2) 55%, var(--brass-3));
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
+}
+.unit.ajar .handle__lever,
+.unit.open .handle__lever {
+  transform: rotate(-16deg);
+}
+.handle__lock {
+  position: absolute;
+  right: 0.12rem;
+  top: 1.25rem;
+  width: 0.55rem;
+  height: 0.95rem;
+  border-radius: 99px;
+  background: linear-gradient(180deg, var(--brass-1), var(--brass-3));
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
+}
+.handle__lock::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 28%;
+  width: 3px;
+  height: 6px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: #2a1c08;
+}
+.sill {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 5px;
+  background: linear-gradient(180deg, var(--casing), color-mix(in srgb, var(--casing) 75%, #000));
+}
+/* light spilling on to the floor in front of an open door */
+.pool {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 180%;
+  height: 7rem;
+  transform: translateX(-42%) skewX(-28deg);
+  background: radial-gradient(60% 100% at 40% 0%, rgba(var(--spill), 0.55), transparent 75%);
+  opacity: 0;
+  transition: opacity 0.8s var(--e-soft);
+  pointer-events: none;
+  z-index: 2;
+}
+.unit.ajar .pool {
+  opacity: 0.75;
+}
+.unit.open .pool {
+  opacity: 1;
+}
+
+/* ---------- info beside the active door ---------- */
+.dinfo {
+  position: absolute;
+  top: 26%;
+  left: calc(50% + min(9.5rem, 12vw));
+  width: max-content;
+  max-width: 21rem;
+  z-index: 3;
+  pointer-events: none;
+  visibility: hidden;
+}
+.unit--right .dinfo {
+  left: auto;
+  right: calc(50% + min(9.5rem, 12vw));
+}
+.dinfo.on {
+  visibility: visible;
+}
+.doors--wall .dinfo {
+  padding: 1.1rem 1.25rem 1.2rem;
+  border-radius: var(--radius-card-sm);
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.dinfo__h {
+  font-size: clamp(1.2rem, 1.9vw, 1.6rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.dinfo__t {
+  margin-top: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.dinfo__p {
+  margin-top: 0.9rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.dinfo__p li {
+  position: relative;
+  padding-left: 1.6rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.dinfo__p li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6.5 12.5 3.5 3.5 7.5-8'/%3E%3C/svg%3E")
+      center / 70% no-repeat,
+    var(--accent);
+}
+:root[data-theme='dark'] .dinfo__p li::before {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a1818' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6.5 12.5 3.5 3.5 7.5-8'/%3E%3C/svg%3E")
+      center / 70% no-repeat,
+    #d9c6c6;
+}
+.dinfo > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+}
+.dinfo.on > * {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s var(--e-soft) 0.12s,
+    transform 0.8s var(--e-soft) 0.12s;
+}
+.dinfo.on > .dinfo__t {
+  transition-delay: 0.18s;
+}
+.dinfo.on > .dinfo__p {
+  transition-delay: 0.24s;
+}
+
+/* ---------- skirting board and floor ---------- */
+.doors__base {
+  height: 0.9rem;
+  background: linear-gradient(180deg, var(--casing), color-mix(in srgb, var(--casing) 82%, #000));
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.08);
+}
+.doors__floor {
+  height: clamp(3.5rem, 11vh, 6.5rem);
+  background:
+    radial-gradient(50% 120% at 8% 100%, rgba(232, 150, 110, 0.55), transparent 70%),
+    linear-gradient(180deg, var(--floor), var(--floor-2));
+}
+:root[data-theme='dark'] .doors__floor {
+  background: linear-gradient(180deg, var(--floor), var(--floor-2));
+}
+
+.door-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 70;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-pill);
+  background: #f3efea;
+  color: #1a1818;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.6;
+  transition:
+    opacity 0.25s,
+    scale 0.4s var(--e-spring);
+}
+.door-cursor.on {
+  opacity: 1;
+  scale: 1;
+}
+
+@media (max-height: 640px) and (min-width: 901px) {
+  .paint {
+    font-size: 2.4rem;
+  }
+}
+
+/* ---------- touch layout: a swipeable wall ---------- */
+@media (max-width: 900px) {
+  .doors {
+    height: auto;
+  }
+  .doors__pin {
+    position: relative;
+    height: auto;
+    min-height: 100svh;
+  }
+  .doors__wall {
+    position: relative;
+    min-height: 100svh;
+  }
+  .doors__inner {
+    padding-inline: 0;
+  }
+  .paint {
+    padding-inline: var(--gut);
+  }
+  .paint .mbr {
+    display: inline;
+  }
+  .doors__hint {
+    display: block;
+    margin-top: 0.9rem;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .doors__row {
+    order: 3;
+    flex: none;
+    display: flex;
+    gap: 1.5rem;
+    height: min(27rem, 52svh);
+    margin-top: 1.25rem;
+    padding-inline: calc(50% - min(6.25rem, 24svh * 0.47 + 1.5rem));
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    align-items: stretch;
+  }
+  .doors__row::-webkit-scrollbar {
+    display: none;
+  }
+  .unit {
+    flex: none;
+    height: 100%;
+    scroll-snap-align: center;
+  }
+  .doorway {
+    cursor: pointer;
+  }
+  .dinfo,
+  .door-cursor {
+    display: none;
+  }
+  .minfo {
+    display: block;
+    order: 2;
+    margin-top: 1.4rem;
+    text-align: center;
+    padding-inline: var(--gut);
+    min-height: 5.2rem;
+  }
+  .doors__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 0.9rem;
+  }
+  .doors__dots i {
+    width: 6px;
+    height: 6px;
+    border-radius: 99px;
+    background: var(--muted);
+    opacity: 0.4;
+    transition:
+      width 0.4s var(--e-soft),
+      opacity 0.3s;
+  }
+  .doors__dots i.on {
+    width: 20px;
+    opacity: 1;
+    background: var(--ink);
+  }
+}

@@ -1,0 +1,217 @@
+.hdr {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  transform: translate3d(0, -12px, 0);
+  --d: 150ms;
+}
+.hdr::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.2);
+  border-bottom: 1px solid var(--line);
+  opacity: 0;
+  transition: opacity 0.4s var(--e-soft);
+}
+.hdr.is-stuck::before {
+  opacity: 1;
+}
+.hdr__in {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  height: var(--hdr-h);
+  /* room for the pull cord on the right */
+  padding-right: calc(var(--gut) + 1.5rem);
+}
+.nav {
+  display: flex;
+  gap: 1.4rem;
+}
+.nav button {
+  position: relative;
+  padding: 0.35rem 0;
+  font-size: 0.875rem;
+  font-weight: 450;
+  white-space: nowrap;
+}
+.nav button span {
+  display: block;
+  opacity: 0.78;
+  transition:
+    transform 0.4s var(--e-spring),
+    opacity 0.3s;
+}
+.nav button:hover span {
+  transform: translateY(-2px);
+  opacity: 1;
+}
+.nav button::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--e-soft);
+}
+.nav button[aria-current='page'] span {
+  opacity: 1;
+}
+.room-view .nav button[aria-current='page']::after {
+  transform: scaleX(1);
+}
+
+.menu-btn {
+  display: none;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+.menu-btn svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+.clock__lbl {
+  color: var(--muted);
+}
+.clock__time {
+  font-weight: 650;
+}
+.clock__sep {
+  color: var(--muted);
+  font-size: 0.6rem;
+}
+.clock__date {
+  color: var(--subtle);
+}
+.clock__ds {
+  display: none;
+  color: var(--subtle);
+}
+
+@media (max-width: 1180px) {
+  .hdr__nav {
+    display: none;
+  }
+  .menu-btn {
+    display: inline-flex;
+  }
+}
+@media (max-width: 560px) {
+  .clock__lbl,
+  .clock__date {
+    display: none;
+  }
+  .clock__ds {
+    display: inline;
+  }
+  .hdr__in {
+    padding-right: calc(var(--gut) + 2.4rem);
+  }
+}
+
+/* ---------- full-screen menu ---------- */
+.navm {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  background: #141212;
+  color: #e8e4e0;
+  clip-path: inset(0 0 100% 0);
+  visibility: hidden;
+  transition:
+    clip-path 0.75s var(--e-soft),
+    visibility 0s 0.75s;
+}
+.navm.on {
+  clip-path: inset(0);
+  visibility: visible;
+  transition:
+    clip-path 0.75s var(--e-soft),
+    visibility 0s;
+}
+.navm .chip {
+  border-color: rgba(196, 176, 176, 0.2);
+  background: rgba(196, 176, 176, 0.08);
+}
+.navm .chip svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+.navm__top,
+.navm__bot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--hdr-h);
+  font-size: 0.875rem;
+}
+.navm__brand {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  font-size: 1.05rem;
+}
+.navm__nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow-y: auto;
+}
+.navm__nav ul {
+  width: 100%;
+}
+.navm__nav li {
+  border-bottom: 1px solid rgba(196, 176, 176, 0.14);
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.5s var(--e-soft),
+    transform 0.7s var(--e-soft);
+}
+.navm.on .navm__nav li {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(0.18s + var(--i) * 55ms);
+}
+.navm__nav button {
+  display: flex;
+  align-items: baseline;
+  gap: 1.1rem;
+  width: 100%;
+  padding: 0.85rem 0;
+  text-align: left;
+  font-size: clamp(1.7rem, 6.2vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.navm__nav button span {
+  transition: transform 0.5s var(--e-spring);
+}
+.navm__nav button:hover span {
+  transform: translateX(10px);
+}
+.navm__nav small {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #857878;
+}
+.navm__bot {
+  color: #b5a8a8;
+}
+.navm__bot button {
+  color: #e8e4e0;
+  font-weight: 600;
+}
