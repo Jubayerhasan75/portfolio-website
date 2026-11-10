@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jubayer-portfolio-website.vercel.app/sitemap.xml
